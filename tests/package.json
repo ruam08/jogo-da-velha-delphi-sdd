@@ -1,0 +1,19 @@
+{
+  "name": "jogo-da-velha-tests",
+  "version": "0.4.0",
+  "private": true,
+  "description": "Testes end-to-end (Playwright + TypeScript) contra o servidor Delphi real do Jogo da Velha.",
+  "scripts": {
+    "test": "playwright test",
+    "report": "playwright show-report",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "@types/node": "24.10.1",
+    "typescript": "5.9.3"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
