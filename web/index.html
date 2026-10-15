@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Jogo da Velha</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <main class="app" data-testid="app" data-state="loading">
+    <header class="app__header">
+      <h1 class="app__title">Jogo da Velha</h1>
+      <p class="app__subtitle">Dois jogadores, um tabuleiro. As regras ficam no servidor.</p>
+    </header>
+
+    <section class="turn" aria-label="Situação da partida">
+      <span class="turn__badge" data-testid="turn-badge" data-player="" aria-hidden="true"></span>
+      <p class="turn__status" id="status" data-testid="status" role="status" aria-live="polite">Carregando partida…</p>
+    </section>
+
+    <div class="board" data-testid="board" role="group" aria-label="Tabuleiro" aria-busy="true">
+      <button type="button" class="cell" data-testid="cell-0" data-index="0" aria-disabled="true" aria-label="Linha 1, coluna 1: vazia"></button>
+      <button type="button" class="cell" data-testid="cell-1" data-index="1" aria-disabled="true" aria-label="Linha 1, coluna 2: vazia"></button>
+      <button type="button" class="cell" data-testid="cell-2" data-index="2" aria-disabled="true" aria-label="Linha 1, coluna 3: vazia"></button>
+      <button type="button" class="cell" data-testid="cell-3" data-index="3" aria-disabled="true" aria-label="Linha 2, coluna 1: vazia"></button>
+      <button type="button" class="cell" data-testid="cell-4" data-index="4" aria-disabled="true" aria-label="Linha 2, coluna 2: vazia"></button>
+      <button type="button" class="cell" data-testid="cell-5" data-index="5" aria-disabled="true" aria-label="Linha 2, coluna 3: vazia"></button>
+      <button type="button" class="cell" data-testid="cell-6" data-index="6" aria-disabled="true" aria-label="Linha 3, coluna 1: vazia"></button>
+      <button type="button" class="cell" data-testid="cell-7" data-index="7" aria-disabled="true" aria-label="Linha 3, coluna 2: vazia"></button>
+      <button type="button" class="cell" data-testid="cell-8" data-index="8" aria-disabled="true" aria-label="Linha 3, coluna 3: vazia"></button>
+    </div>
+
+    <p class="alert" data-testid="error-message" role="alert" hidden></p>
+
+    <div class="actions">
+      <button type="button" class="button button--primary" data-testid="new-game">Nova partida</button>
+      <button type="button" class="button button--secondary" data-testid="retry" hidden>Tentar novamente</button>
+    </div>
+
+    <p class="app__hint">Use Tab ou as setas para escolher uma casa e Enter ou Espaço para jogar.</p>
+  </main>
+</body>
+</html>

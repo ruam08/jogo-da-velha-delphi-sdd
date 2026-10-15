@@ -1,0 +1,324 @@
+/* Jogo da Velha - estilos. Sem bibliotecas; tema claro e escuro. */
+
+:root {
+  --bg: #f4f5fb;
+  --bg-accent: #e7e9f7;
+  --surface: #ffffff;
+  --surface-muted: #f1f2f9;
+  --border: #dfe2ee;
+  --text: #1c1f2e;
+  --text-muted: #5d6275;
+  --x: #4338ca;
+  --x-soft: #e0e7ff;
+  --o: #db2777;
+  --o-soft: #fce7f3;
+  --win: #f59e0b;
+  --win-soft: #fff4d6;
+  --danger: #b42318;
+  --danger-soft: #fef0ee;
+  --focus: #2563eb;
+  --shadow: 0 1px 2px rgba(28, 31, 46, 0.06), 0 12px 32px rgba(28, 31, 46, 0.08);
+  --radius: 18px;
+  --cell-radius: 14px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1118;
+    --bg-accent: #171a26;
+    --surface: #181b27;
+    --surface-muted: #202435;
+    --border: #2b3045;
+    --text: #eceef6;
+    --text-muted: #a2a7bb;
+    --x: #a5b4fc;
+    --x-soft: #26295a;
+    --o: #f9a8d4;
+    --o-soft: #4a1d36;
+    --win: #fbbf24;
+    --win-soft: #3d3014;
+    --danger: #ff8a80;
+    --danger-soft: #3a1c1a;
+    --focus: #93c5fd;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px rgba(0, 0, 0, 0.35);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: clamp(16px, 5vh, 56px) 16px;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 15% 0%, var(--bg-accent), transparent 45%),
+    radial-gradient(circle at 85% 100%, var(--bg-accent), transparent 40%),
+    var(--bg);
+}
+
+/* ---- Cartão principal ---------------------------------------------------- */
+
+.app {
+  width: 100%;
+  max-width: 440px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: clamp(20px, 5vw, 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.app__header {
+  text-align: center;
+}
+
+.app__title {
+  margin: 0;
+  font-size: clamp(1.6rem, 6vw, 2rem);
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+
+.app__subtitle,
+.app__hint {
+  margin: 6px 0 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.app__hint {
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+/* ---- Situação da partida -------------------------------------------------- */
+
+.turn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 999px;
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+}
+
+.turn__badge {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  border: 2px solid var(--border);
+  transition: color 0.2s, background-color 0.2s, border-color 0.2s;
+}
+
+.turn__badge[data-player="X"] { color: var(--x); background: var(--x-soft); border-color: var(--x); }
+.turn__badge[data-player="O"] { color: var(--o); background: var(--o-soft); border-color: var(--o); }
+.turn__badge[data-player="draw"] { color: var(--text); }
+.turn__badge[data-player="offline"] { color: var(--danger); background: var(--danger-soft); border-color: var(--danger); }
+
+.turn__status {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 650;
+}
+
+.app[data-state="finished"] .turn {
+  background: var(--win-soft);
+  border-color: var(--win);
+}
+
+/* ---- Tabuleiro ------------------------------------------------------------- */
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(8px, 2.5vw, 12px);
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  padding: clamp(8px, 2.5vw, 12px);
+  border-radius: var(--radius);
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  transition: opacity 0.2s;
+}
+
+.cell {
+  min-width: 44px;
+  min-height: 44px;
+  aspect-ratio: 1 / 1;
+  border: 2px solid var(--border);
+  border-radius: var(--cell-radius);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: clamp(2.4rem, 13vw, 3.6rem);
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: transform 0.12s ease, background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.cell[data-symbol="X"] { color: var(--x); background: var(--x-soft); border-color: transparent; }
+.cell[data-symbol="O"] { color: var(--o); background: var(--o-soft); border-color: transparent; }
+
+/* Casa vazia em jogo: realce ao passar o mouse. */
+.app[data-state="playing"] .cell:not([data-symbol="X"]):not([data-symbol="O"]):hover {
+  border-color: var(--x);
+  transform: translateY(-1px);
+}
+
+.cell:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.cell[data-winning="true"] {
+  background: var(--win-soft);
+  border-color: var(--win);
+  box-shadow: 0 0 0 3px var(--win), 0 6px 18px rgba(245, 158, 11, 0.35);
+  animation: win-pop 0.45s ease;
+}
+
+/* Partida encerrada: casas não vencedoras ficam apagadas. */
+.cell[aria-disabled="true"] {
+  cursor: default;
+}
+
+.app[data-state="finished"] .cell:not([data-winning="true"]) {
+  opacity: 0.55;
+}
+
+/* Carregamento e requisição em andamento. */
+.board[aria-busy="true"] {
+  cursor: progress;
+}
+
+.app.is-busy .board {
+  opacity: 0.85;
+}
+
+.app[data-state="loading"] .cell {
+  background: linear-gradient(100deg, var(--surface) 30%, var(--surface-muted) 50%, var(--surface) 70%);
+  background-size: 300% 100%;
+  animation: shimmer 1.2s linear infinite;
+}
+
+.app[data-state="offline"] .board {
+  opacity: 0.6;
+}
+
+@keyframes win-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shimmer {
+  from { background-position: 100% 0; }
+  to { background-position: -100% 0; }
+}
+
+/* ---- Mensagens e ações --------------------------------------------------- */
+
+.alert {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--danger);
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.alert[hidden] {
+  display: none;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.button {
+  flex: 1 1 140px;
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: 12px;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.12s ease;
+}
+
+.button[hidden] {
+  display: none;
+}
+
+.button:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.button--primary {
+  border: none;
+  color: #ffffff;
+  background: var(--x);
+}
+
+.button--primary:hover {
+  filter: brightness(1.08);
+}
+
+.button--secondary {
+  border: 2px solid var(--danger);
+  color: var(--danger);
+  background: transparent;
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+@media (prefers-color-scheme: dark) {
+  .button--primary { color: #12142a; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
