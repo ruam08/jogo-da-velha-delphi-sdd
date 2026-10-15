@@ -1,0 +1,22 @@
+# Delphi
+*.dcu
+*.exe
+*.local
+*.identcache
+*.stat
+*.dsk
+*.~*
+__history/
+__recovery/
+server/bin/
+server/dcu/
+server/Win32/
+server/Win64/
+
+# Validações
+logs/
+
+# Node / Playwright (entregas futuras)
+node_modules/
+test-results/
+playwright-report/
