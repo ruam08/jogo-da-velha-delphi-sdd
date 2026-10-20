@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Jogo da Velha online</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/online.css">
+  <script src="/online.js" defer></script>
+</head>
+<body>
+  <main class="app online-app" data-testid="online-app" data-state="inicio" data-connection="parado" data-version="0">
+    <header class="app__header">
+      <h1 class="app__title">Jogo da Velha online</h1>
+      <p class="app__subtitle">Duas pessoas, dois navegadores, uma sala. As regras ficam no servidor.</p>
+    </header>
+
+    <section class="turn" aria-label="Situação">
+      <span class="turn__badge" data-testid="turn-badge" data-player="" aria-hidden="true"></span>
+      <p class="turn__status" data-testid="status" role="status" aria-live="polite">Carregando…</p>
+    </section>
+
+    <!-- Tela inicial (CIO-01) -->
+    <section class="online-start" data-testid="start-panel" aria-label="Começar" hidden>
+      <button type="button" class="button button--primary" data-testid="create-room">Criar sala</button>
+      <p class="online-start__or">ou</p>
+      <form class="online-join" data-testid="join-form" novalidate>
+        <label class="online-join__label" for="room-code-input">Código da sala</label>
+        <div class="online-join__row">
+          <input class="online-join__input" id="room-code-input" data-testid="room-code-input" name="sala"
+                 type="text" maxlength="20" autocomplete="off" autocapitalize="characters" spellcheck="false"
+                 placeholder="Ex.: K7PM2Q">
+          <button type="submit" class="button button--primary online-join__button" data-testid="join-room">Entrar</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Link aberto sem lugar guardado (CIO-03) -->
+    <section class="online-invite" data-testid="invite-panel" aria-label="Convite" hidden>
+      <p class="online-invite__text">Sala <strong class="online-code" data-testid="invite-code"></strong> aguardando o segundo jogador.</p>
+      <button type="button" class="button button--primary" data-testid="join-this-room">Entrar na sala</button>
+    </section>
+
+    <!-- Sala (CIO-02, CIO-04 a CIO-07) -->
+    <section class="online-share" data-testid="share-panel" aria-label="Compartilhar a sala" hidden>
+      <p class="online-share__code">Sala <strong class="online-code" data-testid="room-code"></strong></p>
+      <a class="online-share__link" data-testid="room-link" href="/online.html"></a>
+      <div class="online-share__actions">
+        <button type="button" class="button button--ghost" data-testid="copy-link">Copiar link</button>
+        <span class="online-share__feedback" data-testid="copy-feedback" aria-live="polite" hidden></span>
+      </div>
+    </section>
+
+    <section class="online-presence" data-testid="room-panel" aria-label="Jogadores e conexão" hidden>
+      <p class="online-presence__line">
+        <span class="online-you" data-testid="you-are"></span>
+        <span class="online-presence__sep" aria-hidden="true">·</span>
+        <span class="online-game-number" data-testid="game-number"></span>
+      </p>
+      <p class="online-opponent" data-testid="opponent-status" role="status" aria-live="polite"></p>
+      <p class="online-connection" data-testid="connection-status" aria-live="polite"></p>
+    </section>
+
+    <div class="board" data-testid="board" role="group" aria-label="Tabuleiro" aria-busy="false" hidden>
+      <button type="button" class="cell" data-testid="cell-0" data-index="0" aria-disabled="true" aria-label="Linha 1, coluna 1: vazia"></button>
+      <button type="button" class="cell" data-testid="cell-1" data-index="1" aria-disabled="true" aria-label="Linha 1, coluna 2: vazia"></button>
+      <button type="button" class="cell" data-testid="cell-2" data-index="2" aria-disabled="true" aria-label="Linha 1, coluna 3: vazia"></button>
+      <button type="button" class="cell" data-testid="cell-3" data-index="3" aria-disabled="true" aria-label="Linha 2, coluna 1: vazia"></button>
+      <button type="button" class="cell" data-testid="cell-4" data-index="4" aria-disabled="true" aria-label="Linha 2, coluna 2: vazia"></button>
+      <button type="button" class="cell" data-testid="cell-5" data-index="5" aria-disabled="true" aria-label="Linha 2, coluna 3: vazia"></button>
+      <button type="button" class="cell" data-testid="cell-6" data-index="6" aria-disabled="true" aria-label="Linha 3, coluna 1: vazia"></button>
+      <button type="button" class="cell" data-testid="cell-7" data-index="7" aria-disabled="true" aria-label="Linha 3, coluna 2: vazia"></button>
+      <button type="button" class="cell" data-testid="cell-8" data-index="8" aria-disabled="true" aria-label="Linha 3, coluna 3: vazia"></button>
+    </div>
+
+    <p class="alert" data-testid="error-message" role="alert" hidden></p>
+    <p class="online-hint" data-testid="room-hint" hidden></p>
+
+    <div class="actions">
+      <button type="button" class="button button--primary" data-testid="new-game" hidden>Nova partida</button>
+      <button type="button" class="button button--secondary" data-testid="leave-room" hidden>Sair da sala</button>
+      <button type="button" class="button button--primary" data-testid="reconnect" hidden>Reconectar agora</button>
+      <button type="button" class="button button--primary" data-testid="use-here" hidden>Usar nesta aba</button>
+      <button type="button" class="button button--primary" data-testid="create-new-room" hidden>Criar nova sala</button>
+      <button type="button" class="button button--primary" data-testid="retry" hidden>Tentar novamente</button>
+    </div>
+
+    <p class="app__hint online-footer">
+      <span class="online-footer__keys">Use Tab ou as setas para escolher uma casa e Enter ou Espaço para jogar.</span>
+      <a class="online-footer__link" href="/">Voltar ao jogo local</a>
+    </p>
+  </main>
+</body>
+</html>

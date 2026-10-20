@@ -1,0 +1,251 @@
+/*
+ * Jogo da Velha online - só o que é novo em relação a style.css
+ * (docs/plan-online.md, 9.1). Tudo fica sob .online-app ou em classes
+ * online-*, para não afetar a página local.
+ */
+
+.online-app [hidden] {
+  display: none !important;
+}
+
+/* Sem jogador a indicar (tela inicial, sala encerrada...): sem o círculo vazio. */
+.online-app .turn__badge[data-player=""] {
+  display: none;
+}
+
+/* ---- Tela inicial e convite ---------------------------------------------- */
+
+.online-start,
+.online-invite {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.online-start > .button,
+.online-invite > .button {
+  flex: none;
+  width: 100%;
+}
+
+.online-start__or {
+  margin: 0;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.online-join {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.online-join__label {
+  font-weight: 650;
+  font-size: 0.95rem;
+}
+
+.online-join__row {
+  display: flex;
+  gap: 10px;
+}
+
+.online-join__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 1.1rem;
+  font-weight: 650;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.online-join__input::placeholder {
+  letter-spacing: normal;
+  text-transform: none;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.online-join__input:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.online-join__button {
+  flex: none;
+  width: auto;
+}
+
+.online-invite__text {
+  margin: 0;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.online-code {
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  letter-spacing: 0.12em;
+  font-size: 1.05em;
+}
+
+/* ---- Compartilhamento ------------------------------------------------------ */
+
+.online-share {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+}
+
+.online-share__code {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.online-share__code .online-code {
+  font-size: 1.35rem;
+}
+
+.online-share__link {
+  color: var(--focus);
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+
+.online-share__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.online-share__actions .button {
+  flex: none;
+  min-height: 44px;
+}
+
+.online-share__feedback {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.button--ghost {
+  border: 2px solid var(--border);
+  color: var(--text);
+  background: var(--surface);
+}
+
+.button--ghost:hover {
+  border-color: var(--focus);
+}
+
+/* ---- Jogadores e conexão ----------------------------------------------------- */
+
+.online-presence {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: center;
+}
+
+.online-presence p {
+  margin: 0;
+}
+
+.online-presence__line {
+  font-weight: 650;
+}
+
+.online-presence__sep {
+  margin: 0 6px;
+  color: var(--text-muted);
+}
+
+.online-opponent,
+.online-connection {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.online-connection::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  vertical-align: middle;
+}
+
+.online-app[data-connection="conectado"] .online-connection::before {
+  background: #16a34a;
+}
+
+.online-app[data-connection="reconectando"] .online-connection::before,
+.online-app[data-connection="conectando"] .online-connection::before {
+  background: var(--win);
+}
+
+.online-app[data-connection="offline"] .online-connection {
+  color: var(--danger);
+  font-weight: 650;
+}
+
+.online-app[data-connection="offline"] .online-connection::before {
+  background: var(--danger);
+}
+
+.online-hint {
+  margin: -8px 0 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* ---- Tabuleiro: os mesmos estilos do jogo local, com os estados da sala ---- */
+
+.online-app[data-state="jogando"] .cell:not([aria-disabled="true"]):not([data-symbol="X"]):not([data-symbol="O"]):hover {
+  border-color: var(--x);
+  transform: translateY(-1px);
+}
+
+.online-app[data-state="finalizada"] .turn {
+  background: var(--win-soft);
+  border-color: var(--win);
+}
+
+.online-app[data-state="finalizada"] .cell:not([data-winning="true"]),
+.online-app[data-state="encerrada"] .board,
+.online-app[data-state="substituida"] .board {
+  opacity: 0.55;
+}
+
+.online-app.is-busy .board {
+  opacity: 0.85;
+}
+
+/* ---- Rodapé -------------------------------------------------------------------- */
+
+.online-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.online-footer__link {
+  color: var(--focus);
+}

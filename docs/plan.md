@@ -2,8 +2,8 @@
 
 | Campo | Valor |
 |---|---|
-| Versão | 0.8 |
-| Data | 2026-10-15 |
+| Versão | 0.9 |
+| Data | 2026-10-16 |
 | Etapa SDD | 2 — Plano técnico |
 | Base | `docs/spec.md` v0.4 |
 | Status | Aguardando aprovação. Nenhum código foi implementado. |
@@ -46,7 +46,7 @@ Cada camada só conhece a de baixo. O motor (`uGameEngine`) não sabe que existe
 | DT-04 | Arquivos estáticos servidos por **lista fixa** (`/`, `/index.html`, `/style.css`, `/app.js`), cada um com seu `Content-Type`. O arquivo é lido do disco a cada requisição (`TFile.ReadAllBytes`) a partir da pasta `--www`. | Elimina o risco de *path traversal* (`/../`) sem código de saneamento de caminho; editar a interface não exige recompilar o servidor. |
 | DT-05 | JSON com a unit **`System.JSON`** da RTL. | Existe no Berlin; dispensa bibliotecas de terceiros. |
 | DT-06 | Estado em memória, numa única instância de `TGameService`, protegida por **`TCriticalSection`**. | O Indy atende cada conexão em uma thread; a seção crítica garante o CA-25. (RNF-06) |
-| DT-07 | Escuta só em **`127.0.0.1`**, porta padrão **8765**, alterável por `--port`. | Requisito local (RNF-04); 8765 evita conflito comum com 8080. (D-07) |
+| DT-07 | Escuta em **`0.0.0.0`** por padrão (o computador e a rede local), alterável por `--bind <IPv4>` (`--bind 127.0.0.1` restringe ao computador); porta padrão **8765**, alterável por `--port`. *Até a versão 0.8: só `127.0.0.1`.* | RNF-04 (spec 0.6); acesso pelo celular na rede local (DO-09 e DTO-16 do modo online); 8765 evita conflito comum com 8080. (D-07) |
 | DT-08 | Respostas geradas como **bytes UTF-8 em `ContentStream`**, com `CharSet = 'utf-8'`. | Evita a armadilha do Indy de codificar `ContentText` em ASCII/ISO-8859-1 e corromper acentos. (RNF-08) |
 | DT-09 | A interface **sempre envia o clique** ao backend, mesmo com a partida encerrada ou a célula ocupada. | O backend é a única autoridade (RN-14) e isso torna os CA-04, CA-16 e CA-17 testáveis pela UI. |
 | DT-10 | Interface em **HTML/CSS/JS puros**, sem build. | Nada para compilar no front-end; o Delphi serve os arquivos como estão. |
@@ -201,10 +201,10 @@ O motor também valida o intervalo 0..8 (defesa em profundidade). A ordem dentro
 ### 4.3 Execução
 
 ```
-TicTacToeServer.exe [--port 8765] [--www <pasta>]
+TicTacToeServer.exe [--port 8765] [--www <pasta>] [--bind <IPv4>]
 ```
 
-- O servidor cria um `Binding` explícito em `127.0.0.1` (sem ele, o Indy escuta em todas as interfaces).
+- O servidor cria um único `Binding` explícito, IPv4, no endereço de `--bind` (padrão `0.0.0.0`; `127.0.0.1` restringe ao computador). Até a versão 0.8 deste plano, o endereço era fixo em `127.0.0.1`. As demais opções do modo online estão em `docs/plan-online.md`, seção 11.4.
 - `--www` padrão: `<pasta do exe>\..\..\web`, que resolve para a pasta `web` do repositório quando o exe está em `server\bin`.
 - Na partida, o console mostra a URL e o caminho da pasta `web`, e avisa se `index.html` não existir nela.
 - Se a porta estiver ocupada, a mensagem diz isso e o processo sai com código 1.
@@ -494,3 +494,4 @@ A matriz completa CA → cenários (M, R, A, U) está em `docs/test-plan.md`, se
 | 0.6 | 2026-10-15 | Entrega 3, após a primeira validação real: o parser JSON do Delphi Berlin normaliza o texto dos números (`4.0` → `4`, `1e0` → `1`), o que tornou inviável, sem um analisador próprio, recusar inteiros escritos com fração ou expoente. O contrato (3.3) passou a exigir **valor** inteiro; a RN-04 da spec (número inteiro; fracionário inválido) continua atendida. |
 | 0.7 | 2026-10-15 | Entrega 4: versões do Playwright/TypeScript (DT-20) e verificação de compatibilidade com Windows 10 e Node 24.11.1; seções 6.3 a 6.5 reescritas com a estrutura real de `tests/`, a configuração (`webServer`, relatórios, variáveis `PW_PORT`/`PW_EXTERNAL_SERVER`) e os comandos; critérios de conclusão da Entrega 4. |
 | 0.8 | 2026-10-15 | Entrega 5: seção 5 reescrita (arquivos, `data-testid`, uma requisição por vez, tempo-limite, teclado); estáticos com `Content-Type` e `Cache-Control: no-cache`, lidos do disco (DT-04); 404 JSON também fora da API (DT-21); DT-22 (uma requisição por vez); DT-23 (instalação do Chromium); `--www`; critérios da Entrega 5; falha de comunicação antecipada da Entrega 6. |
+| 0.9 | 2026-10-16 | Entrega O2 do modo online: DT-07 e a seção 4.3 alinhadas ao endereço de escuta em uso (`0.0.0.0` por padrão, `--bind` para escolher; MC-01 de `docs/plan-online.md`). Os critérios históricos da Entrega 1 (bind em `127.0.0.1`) foram mantidos como registro. O contrato da API (seção 3) não mudou. |

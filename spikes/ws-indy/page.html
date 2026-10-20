@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>WsSpike</title>
+  <link rel="icon" href="data:,">
+</head>
+<body>
+  <p>Prova de conceito WebSocket (Entrega O0). Página de teste, sem interface.</p>
+  <script>
+    // Estado lido pelo teste no Chromium (client/browser-test.cjs).
+    window.spike = { opened: false, received: [], close: null, errors: 0 };
+    var url = (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/ws';
+    window.ws = new WebSocket(url);
+    ws.onopen = function () { spike.opened = true; };
+    ws.onmessage = function (e) { spike.received.push(e.data); };
+    ws.onerror = function () { spike.errors++; };
+    ws.onclose = function (e) { spike.close = { code: e.code, reason: e.reason }; };
+  </script>
+</body>
+</html>

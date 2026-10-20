@@ -48,6 +48,24 @@ export default defineConfig({
         trace: 'retain-on-failure',
       },
     },
+    // Modo online, rotas REST de sala (docs/plan-online.md, seção 12; Entrega O2).
+    // Pastas "room-*": "online/api" seria capturada também pelo padrão "api/**"
+    // do projeto api, porque o Playwright prefixa os padrões com "**/".
+    { name: 'online-api', testMatch: ['online/room-api/**/*.spec.ts', 'online/room-rules/**/*.spec.ts'] },
+    // Canal em tempo real (Entrega O3): WebSocket nativo do Node e socket cru, contra o servidor real.
+    { name: 'online-ws', testMatch: ['online/room-ws/**/*.spec.ts'] },
+    // Ciclo de vida e segurança com servidores dedicados (portas 8770 a 8779).
+    { name: 'online-lifecycle', testMatch: ['online/lifecycle/**/*.spec.ts'] },
+    // Interface online (Entrega O4): Chromium, um contexto isolado por jogador.
+    {
+      name: 'online-ui',
+      testMatch: ['online/room-ui/**/*.spec.ts'],
+      use: {
+        ...devices['Desktop Chrome'],
+        screenshot: 'only-on-failure',
+        trace: 'retain-on-failure',
+      },
+    },
   ],
   webServer: EXTERNAL_SERVER
     ? undefined

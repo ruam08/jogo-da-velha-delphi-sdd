@@ -2,8 +2,8 @@
 
 | Campo | Valor |
 |---|---|
-| Versão | 0.5 |
-| Data | 2026-10-15 |
+| Versão | 0.6 |
+| Data | 2026-10-16 |
 | Etapa SDD | 1 — Especificação (revisada) |
 | Status | Aguardando aprovação junto com `docs/plan.md` e `docs/test-plan.md` |
 
@@ -248,7 +248,7 @@ Toda resposta de erro da API inclui um código de erro e uma mensagem legível e
 | RNF-01 | **Compatibilidade:** o backend compila e executa no Delphi 10.1 Berlin, usando apenas a RTL e o Indy 10 que acompanham essa versão. Nenhum recurso de versões posteriores pode ser usado (ex.: variáveis inline, introduzidas no 10.3 Rio). |
 | RNF-02 | **Plataforma:** executa localmente em Windows (Win32), sem serviços adicionais além do executável Delphi e, para testes, Node.js. |
 | RNF-03 | **Sem dependências desnecessárias:** sem banco de dados, sem componentes Delphi de terceiros além do Indy que acompanha o Berlin, sem frameworks de front-end e sem bundlers. No projeto de testes, as únicas dependências são Playwright e TypeScript. |
-| RNF-04 | **Rede:** o servidor escuta somente em `127.0.0.1`, em porta configurável (padrão definido no plano). |
+| RNF-04 | **Rede:** o servidor escuta, por padrão, em `0.0.0.0` (todas as interfaces IPv4: o próprio computador e a rede local), em porta configurável (padrão definido no plano). A opção `--bind <IPv4>` escolhe o endereço; `--bind 127.0.0.1` restringe ao próprio computador. *(Alterado em 2026-10-16, Entrega O2 do modo online, por decisão do usuário (DO-09 de `docs/spec-online.md`): a versão 0.5 exigia somente `127.0.0.1`.)* |
 | RNF-05 | **Mesma origem:** o próprio servidor Delphi entrega os arquivos da interface e a API, sem configuração de CORS *(premissa — ver D-06)*. |
 | RNF-06 | **Concorrência:** como o `TIdHTTPServer` atende cada conexão em uma thread, todo acesso ao estado da partida é serializado com `TCriticalSection`. |
 | RNF-07 | **Separação de responsabilidades:** a lógica do jogo fica em uma unit Delphi independente do Indy, do JSON e da UI, e pode ser verificada isoladamente. |
@@ -288,3 +288,4 @@ Até serem respondidas, a especificação adota a **premissa** indicada. Qualque
 | 0.3 | 2026-10-15 | Ajustes vindos do plano de testes: RN-04 inclui booleano e diferencia maiúsculas no nome do campo; RN-15 e CE-04/CA-06 tratam JSON que não é objeto (`[4]`, `4`) como corpo inválido. Nenhuma mudança de escopo. |
 | 0.4 | 2026-10-15 | Consistência antes da implementação: incluído o endpoint `GET /health` (escopo 2.1, RNF-14, CA-27), pedido para a primeira entrega do servidor. Não altera nenhuma regra do jogo. |
 | 0.5 | 2026-10-15 | Entrega 5 (interface): CI-10 ganhou tempo-limite de 8 s, o botão "Tentar novamente" e o caso de falha no carregamento inicial; novos CI-12 (carregamento), CI-13 (uma requisição por vez), CI-14 (acessibilidade e teclado), CI-15 (responsividade) e CI-16 (aparência de X/O e do jogador da vez); CA-22 inclui a recuperação; novos CA-28 a CA-32. Nenhuma mudança na API nem nas regras. |
+| 0.6 | 2026-10-16 | Entrega O2 do modo online: RNF-04 alinhada ao endereço de escuta em uso (`0.0.0.0` por padrão, para jogar pela rede local; `--bind 127.0.0.1` restringe ao computador). Decisão DO-09 em `docs/spec-online.md`; detalhes em `docs/plan-online.md` (DTO-16, MC-01). Nenhuma regra do jogo nem contrato da API mudou. |

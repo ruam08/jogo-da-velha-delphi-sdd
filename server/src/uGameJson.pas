@@ -6,7 +6,7 @@
 interface
 
 uses
-  System.SysUtils, uGameEngine;
+  System.SysUtils, System.JSON, uGameEngine;
 
 type
   TMoveBodyResult = (mbOk, mbInvalidBody, mbInvalidPosition);
@@ -34,6 +34,10 @@ const
    primeiro fecha-chaves do JSON encerraria o comentário. *)
 function SnapshotToJson(const AState: TGameSnapshot): string;
 
+{ O mesmo objeto de SnapshotToJson, para ser incluido em outro JSON (modo
+  online: a partida dentro da sala). Quem chama libera o objeto. }
+function SnapshotToJsonValue(const AState: TGameSnapshot): TJSONObject;
+
 (* {"erro":{"codigo":...,"mensagem":...}} *)
 function ErrorToJson(const ACode, AMessage: string): string;
 
@@ -48,8 +52,6 @@ function IsValidUtf8(const ABytes: TBytes): Boolean;
 
 implementation
 
-uses
-  System.JSON;
 
 function CellText(ACell: TCell): string;
 begin
@@ -80,25 +82,36 @@ begin
     Result := TJSONString.Create(CellText(ACell));
 end;
 
-function SnapshotToJson(const AState: TGameSnapshot): string;
+function SnapshotToJsonValue(const AState: TGameSnapshot): TJSONObject;
 var
-  Root: TJSONObject;
   Board, Cells: TJSONArray;
   I: Integer;
 begin
-  Root := TJSONObject.Create;
+  Result := TJSONObject.Create;
   try
     Board := TJSONArray.Create;
-    Root.AddPair('tabuleiro', Board);
+    Result.AddPair('tabuleiro', Board);
     for I := Low(AState.Board) to High(AState.Board) do
       Board.AddElement(TJSONString.Create(CellText(AState.Board[I])));
-    Root.AddPair('status', StatusText(AState.Status));
-    Root.AddPair('jogadorDaVez', PlayerValue(AState.CurrentPlayer));
-    Root.AddPair('vencedor', PlayerValue(AState.Winner));
+    Result.AddPair('status', StatusText(AState.Status));
+    Result.AddPair('jogadorDaVez', PlayerValue(AState.CurrentPlayer));
+    Result.AddPair('vencedor', PlayerValue(AState.Winner));
     Cells := TJSONArray.Create;
-    Root.AddPair('celulasVencedoras', Cells);
+    Result.AddPair('celulasVencedoras', Cells);
     for I := 0 to High(AState.WinningCells) do
       Cells.AddElement(TJSONNumber.Create(AState.WinningCells[I]));
+  except
+    Result.Free;
+    raise;
+  end;
+end;
+
+function SnapshotToJson(const AState: TGameSnapshot): string;
+var
+  Root: TJSONObject;
+begin
+  Root := SnapshotToJsonValue(AState);
+  try
     Result := Root.ToJSON;
   finally
     Root.Free;
