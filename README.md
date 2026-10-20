@@ -17,9 +17,13 @@ Projeto de estudo de **Spec-Driven Development (SDD)**: um Jogo da Velha para do
 - **Entrega 2 — Motor do jogo (`uGameEngine`) e testes unitários (`EngineCheck`):** concluída.
 - **Entrega 3 — Serviço de jogo (`uGameService`) e API HTTP:** concluída.
 - **Entrega 4 — Testes da API com Playwright + TypeScript:** concluída.
+<<<<<<< HEAD
 - **Entrega 5 — Interface web e testes E2E no Chromium:** validada (109/109 testes), aguardando aprovação.
 - Próximas: Entrega 6 (documentação final) e Entrega 7 (validação final).
 - **Modo online (em desenvolvimento, `docs/plan-online.md`):** O0 a O7 aprovadas; o modo online termina na O7 (validação final na rede local, com o roteiro manual parcial). **Projeto de estudo: não será publicado na internet**; a O8 foi cancelada e [`docs/checklist-publicacao-o8.md`](docs/checklist-publicacao-o8.md) fica só como referência.
+=======
+- **Entrega 5 — Interface web e testes E2E no Chromium:** validada (109/109 testes), concluída.
+>>>>>>> 5bad30a4cdc40348eb1e39b40e7c21c745e8cfb5
 
 ![Partida encerrada com vitória de X](docs/screenshots/ui-desktop-vitoria.png)
 
